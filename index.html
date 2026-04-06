@@ -20,6 +20,25 @@
           <div class="pulse-dot"></div>
           <h1>CIVILSENSE <span>AI</span></h1>
         </div>
+        
+        <!-- Weather Widget -->
+        <div class="weather-widget glass" id="weatherWidget" title="Click for details / Change weather">
+          <div class="weather-anim-container" id="weatherAnimContainer">
+            <!-- Sunny by default -->
+            <div class="weather-icon sunny" id="weatherIcon">
+              <div class="sun"></div>
+              <div class="cloud light-cloud"></div>
+            </div>
+          </div>
+          <div class="weather-loc" id="txtWeatherLoc">Jakarta, ID</div>
+          
+          <div class="weather-details hidden" id="weatherDetails">
+            <div class="w-item">Wind: <span id="valWind">12 km/h</span></div>
+            <div class="w-item">Humid: <span id="valHumid">45%</span></div>
+            <div class="w-item">Change: <span id="valForecast">Rain in 5h</span></div>
+          </div>
+        </div>
+
         <div class="status-indicator">
           <button id="btnLangToggle" class="btn-small">EN / ID</button>
           <span class="status-text" id="txtStatus">INITIALIZING...</span>
@@ -96,6 +115,7 @@
         </div>
         <div class="footer-actions">
           <button id="btnExport" class="btn secondary-btn" style="margin-right: 1rem;"><span id="txtBtnExport">Export Doc Report</span></button>
+          <button id="btnToggleWeather" class="btn secondary-btn" style="margin-right: 1rem; border-color: var(--safe); color: var(--safe);"><span id="txtBtnWeather">Toggle Weather</span></button>
           <button id="btnToggleAR" class="btn ar-btn"><span id="txtBtnAR">Toggle AR Heatmap</span></button>
         </div>
       </footer>

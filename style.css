@@ -124,6 +124,178 @@ body {
   gap: 1rem;
 }
 
+/* Weather Widget */
+.weather-widget {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 1rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.weather-widget:hover {
+  background: rgba(0, 240, 255, 0.1);
+}
+
+.weather-anim-container {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.weather-icon {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.sun {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 16px;
+  height: 16px;
+  background: #ffaa00;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ffaa00;
+  animation: spinSun 10s linear infinite;
+  display: none;
+}
+
+.cloud {
+  position: absolute;
+  top: 15px;
+  left: 2px;
+  width: 24px;
+  height: 12px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: inset -2px -2px 5px rgba(0,0,0,0.2);
+  display: none;
+}
+.cloud::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+}
+.cloud::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.dark-cloud {
+  background: #607080;
+}
+.dark-cloud::before, .dark-cloud::after {
+  background: #607080;
+}
+
+.rain-drop {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 6px;
+  background: #00f0ff;
+  animation: rainFall 0.8s linear infinite;
+  display: none;
+}
+
+.lightning {
+  position: absolute;
+  top: 15px;
+  left: 12px;
+  width: 4px;
+  height: 12px;
+  background: #fffaaa;
+  clip-path: polygon(100% 0, 0 50%, 40% 50%, 0 100%, 100% 40%, 60% 40%);
+  animation: flash 2s infinite;
+  display: none;
+}
+
+@keyframes spinSun { 100% { transform: rotate(360deg); } }
+@keyframes rainFall { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(15px); opacity: 0; } }
+@keyframes flash { 0%, 90%, 100% { opacity: 0; } 95% { opacity: 1; } }
+
+.weather-icon.sunny .sun, .weather-icon.sunny .cloud.light-cloud { display: block; }
+.weather-icon.sunny .cloud.light-cloud { animation: floatCloud 3s ease-in-out infinite alternate; }
+
+.weather-icon.rainy .cloud.dark-cloud { display: block; animation: floatCloud 4s ease-in-out infinite alternate; }
+.weather-icon.rainy .rain-drop { display: block; }
+.weather-icon.rainy .rain-drop:nth-child(2) { left: 8px; animation-delay: 0s; }
+.weather-icon.rainy .rain-drop:nth-child(3) { left: 16px; animation-delay: 0.2s; }
+.weather-icon.rainy .rain-drop:nth-child(4) { left: 24px; animation-delay: 0.4s; }
+
+.weather-icon.storm .cloud.dark-cloud { display: block; animation: floatCloud 2s ease-in-out infinite alternate; }
+.weather-icon.storm .rain-drop { display: block; animation-duration: 0.5s; }
+.weather-icon.storm .rain-drop:nth-child(2) { left: 8px; animation-delay: 0.1s; }
+.weather-icon.storm .rain-drop:nth-child(3) { left: 16px; animation-delay: 0.3s; }
+.weather-icon.storm .rain-drop:nth-child(4) { left: 24px; animation-delay: 0.2s; }
+.weather-icon.storm .lightning { display: block; }
+
+@keyframes floatCloud { 0% { transform: translateX(0); } 100% { transform: translateX(5px); } }
+
+.weather-loc {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.weather-details {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  padding: 1rem;
+  width: max-content;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 20;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.weather-details.hidden {
+  opacity: 0;
+  pointer-events: none;
+  display: flex !important;
+}
+
+.w-item {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.w-item span {
+  color: #fff;
+  font-weight: 600;
+}
+
 .pulse-dot {
   width: 12px;
   height: 12px;

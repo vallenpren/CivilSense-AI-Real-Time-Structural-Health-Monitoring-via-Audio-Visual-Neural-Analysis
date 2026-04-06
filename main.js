@@ -49,6 +49,10 @@ const translations = {
     recTitle: "Recommended Action:",
     recText: "Inject high-strength epoxy resin within 48 hours to prevent structural shear failure. The internal void extends deeper than surface indications.",
     btnClose3D: "Close 3D View",
+    weatherWind: "Wind:",
+    weatherHumid: "Humidity:",
+    weatherChange: "Forecast:",
+    btnWeather: "Toggle Weather",
   },
   id: {
     status: "MEMULAI...",
@@ -79,6 +83,10 @@ const translations = {
     recTitle: "Tindakan yang Disarankan:",
     recText: "Suntikkan resin epoksi kekuatan tinggi dalam 48 jam untuk mencegah kegagalan geser struktur. Rongga internal menyebar lebih dalam dari indikasi permukaan.",
     btnClose3D: "Tutup Tampilan 3D",
+    weatherWind: "Angin:",
+    weatherHumid: "Kelembapan:",
+    weatherChange: "Perkiraan:",
+    btnWeather: "Beralih Cuaca",
   }
 };
 
@@ -104,6 +112,17 @@ function applyLanguage() {
   document.getElementById('txtRecTitle').textContent = t.recTitle;
   document.getElementById('txtRecText').textContent = t.recText;
   document.getElementById('txtBtnClose3D').textContent = t.btnClose3D;
+  if(document.getElementById('txtBtnWeather')) document.getElementById('txtBtnWeather').textContent = t.btnWeather;
+  
+  // Update weather labels
+  const wItems = document.querySelectorAll('.w-item');
+  if(wItems.length >= 3) {
+    wItems[0].childNodes[0].nodeValue = t.weatherWind + " ";
+    wItems[1].childNodes[0].nodeValue = t.weatherHumid + " ";
+    wItems[2].childNodes[0].nodeValue = t.weatherChange + " ";
+  }
+  
+  if (typeof applyWeatherLang === 'function') applyWeatherLang();
   
   if (overallStatus.textContent === translations[currentLang === 'en' ? 'id' : 'en'].overallProcessing) overallStatus.textContent = t.overallProcessing;
   if (overallStatus.textContent === translations[currentLang === 'en' ? 'id' : 'en'].overallCritical) overallStatus.textContent = t.overallCritical;
@@ -125,6 +144,55 @@ let dataArray;
 let source;
 let isAudioScanning = false;
 let animationId;
+
+// Weather Widget Logic
+const weatherWidget = document.getElementById('weatherWidget');
+const weatherDetails = document.getElementById('weatherDetails');
+const weatherIcon = document.getElementById('weatherIcon');
+const valWind = document.getElementById('valWind');
+const valHumid = document.getElementById('valHumid');
+const valForecast = document.getElementById('valForecast');
+
+const weatherStates = ['sunny', 'rainy', 'storm'];
+const weatherData = {
+  sunny: { wind: '12 km/h', humid: '45%', forecast: { en: 'Rain in 5h', id: 'Hujan dlm 5j' } },
+  rainy: { wind: '25 km/h', humid: '85%', forecast: { en: 'Clear in 2h', id: 'Cerah dlm 2j' } },
+  storm: { wind: '65 km/h', humid: '95%', forecast: { en: 'Calm in 4h', id: 'Reda dlm 4j' } }
+};
+let currentWeatherIdx = 0;
+
+weatherWidget.addEventListener('click', (e) => {
+  // Toggle details
+  weatherDetails.classList.toggle('hidden');
+  
+  // Optionally cycle weather on click to show animation
+  // Only cycle if details are already open
+  if (!weatherDetails.classList.contains('hidden')) {
+    currentWeatherIdx = (currentWeatherIdx + 1) % weatherStates.length;
+    const st = weatherStates[currentWeatherIdx];
+    weatherIcon.className = `weather-icon ${st}`;
+    
+    let innerHTML = '';
+    if (st === 'sunny') {
+      innerHTML = `<div class="sun"></div><div class="cloud light-cloud"></div>`;
+    } else if (st === 'rainy') {
+      innerHTML = `<div class="cloud dark-cloud"></div><div class="rain-drop"></div><div class="rain-drop"></div><div class="rain-drop"></div>`;
+    } else if (st === 'storm') {
+      innerHTML = `<div class="cloud dark-cloud"></div><div class="lightning"></div><div class="rain-drop"></div><div class="rain-drop"></div><div class="rain-drop"></div>`;
+    }
+    weatherIcon.innerHTML = innerHTML;
+    
+    const data = weatherData[st];
+    valWind.textContent = data.wind;
+    valHumid.textContent = data.humid;
+    valForecast.textContent = data.forecast[currentLang];
+  }
+});
+
+function applyWeatherLang() {
+  const st = weatherStates[currentWeatherIdx];
+  valForecast.textContent = weatherData[st].forecast[currentLang];
+}
 
 // Initialize Camera
 async function initCamera() {
@@ -389,6 +457,11 @@ btnToggleAR.addEventListener('click', () => {
     arOverlay.classList.add('active');
     btnToggleAR.classList.add('active');
   }
+});
+
+// Toggle Weather Button
+document.getElementById('btnToggleWeather')?.addEventListener('click', () => {
+  weatherWidget.classList.toggle('hidden');
 });
 
 // Start app
