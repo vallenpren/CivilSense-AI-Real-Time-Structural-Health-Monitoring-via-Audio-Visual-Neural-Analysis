@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CivilSense AI - Real-Time SHM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- Background Camera Simulation -->
+    <div class="camera-container">
+      <video id="cameraFeed" autoplay playsinline muted></video>
+      <div id="ar-overlay" class="ar-overlay hidden">
+        <div class="heatmap-scan"></div>
+      </div>
+    </div>
+
+    <!-- UI Overlay (Glassmorphism) -->
+    <main class="ui-layer">
+      
+      <!-- Top Bar -->
+      <header class="top-bar glass">
+        <div class="logo">
+          <div class="pulse-dot"></div>
+          <h1>CIVILSENSE <span>AI</span></h1>
+        </div>
+        <div class="status-indicator">
+          <span class="status-text">INITIALIZING...</span>
+          <span class="battery">100%</span>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        
+        <!-- Left Panel: Acoustic Emission (Audio) -->
+        <div class="panel glass left-panel">
+          <h2><i class="icon-audio"></i> Acoustic Emission Analysis</h2>
+          <p class="subtitle">Microscopic Void Detection via Sound Resonance</p>
+          
+          <div class="audio-visualizer-container">
+            <canvas id="audioVisualizer"></canvas>
+            <div class="frequency-stats">
+              <div class="stat"><span class="label">Freq:</span> <span id="valFreq">0 Hz</span></div>
+              <div class="stat"><span class="label">Amp:</span> <span id="valAmp">0 dB</span></div>
+            </div>
+          </div>
+          
+          <button id="btnStartAudio" class="btn primary-btn">
+            <span class="btn-glow"></span>
+            Start Audio Scan
+          </button>
+        </div>
+
+        <!-- Right Panel: Computer Vision (Crack Depth) -->
+        <div class="panel glass right-panel">
+          <h2><i class="icon-camera"></i> Vision Crack Estimator</h2>
+          <p class="subtitle">3D Texture Depth Mapping</p>
+          
+          <div class="vision-preview">
+            <div class="scan-frame">
+              <div class="scan-line"></div>
+              <div class="corner top-left"></div>
+              <div class="corner top-right"></div>
+              <div class="corner bottom-left"></div>
+              <div class="corner bottom-right"></div>
+            </div>
+            <div class="analysis-results">
+              <div class="result-item">
+                <span class="label">Crack Depth:</span>
+                <span class="value critical" id="valDepth">--</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Width:</span>
+                <span class="value warning" id="valWidth">--</span>
+              </div>
+            </div>
+          </div>
+
+          <button id="btnScan" class="btn secondary-btn">
+            Analyze Current Frame
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Panel: AR Stress Map -->
+      <footer class="bottom-panel glass">
+        <div class="ar-control">
+          <h3>Target Surface Condition</h3>
+          <div class="status-badge safe" id="overallStatus">STANDBY</div>
+        </div>
+        <button id="btnToggleAR" class="btn ar-btn">Toggle AR Heatmap</button>
+      </footer>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
