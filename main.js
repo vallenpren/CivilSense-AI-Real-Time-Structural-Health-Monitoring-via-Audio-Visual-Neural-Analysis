@@ -1,3 +1,6 @@
+import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
+import { saveAs } from "file-saver";
+
 // DOM Elements
 const videoElement = document.getElementById('cameraFeed');
 const btnStartAudio = document.getElementById('btnStartAudio');
@@ -12,6 +15,85 @@ const valAmp = document.getElementById('valAmp');
 const valDepth = document.getElementById('valDepth');
 const valWidth = document.getElementById('valWidth');
 const overallStatus = document.getElementById('overallStatus');
+
+let currentLang = 'en';
+
+const translations = {
+  en: {
+    status: "INITIALIZING...",
+    acousticTitle: "Acoustic Emission Analysis",
+    acousticSub: "Microscopic Void Detection via Sound Resonance",
+    freq: "Freq:",
+    amp: "Amp:",
+    btnAudioStart: "START AUDIO SCAN",
+    btnAudioStop: "STOP SCANNING",
+    visionTitle: "Vision Crack Estimator",
+    visionSub: "3D Texture Depth Mapping",
+    depth: "Crack Depth:",
+    width: "Width:",
+    btnScan: "ANALYZE CURRENT FRAME",
+    btnScanActive: "ANALYZING 3D MESH...",
+    targetStatus: "Target Surface Condition",
+    overallProcessing: "PROCESSING",
+    overallCritical: "CRITICAL",
+    btnExport: "Export Doc Report",
+    btnAR: "Toggle AR Heatmap",
+    reportTitle: "Structural Health Monitoring Report",
+    reportDesc: "This document contains automated analysis from CivilSense AI.",
+    valDepthAnalyzing: "Analyzing...",
+    valWidthAnalyzing: "Analyzing..."
+  },
+  id: {
+    status: "MEMULAI...",
+    acousticTitle: "Analisis Emisi Akustik",
+    acousticSub: "Deteksi Rongga Mikroskopis via Resonansi Suara",
+    freq: "Frek:",
+    amp: "Amp:",
+    btnAudioStart: "MULAI PINDAIAN",
+    btnAudioStop: "HENTIKAN PINDAIAN",
+    visionTitle: "Estimatior Retakan Visual",
+    visionSub: "Pemetaan Kedalaman Tekstur 3D",
+    depth: "Kedalaman Retak:",
+    width: "Lebar:",
+    btnScan: "ANALISIS BINGKAI INI",
+    btnScanActive: "MENGANALISIS MESH 3D...",
+    targetStatus: "Kondisi Permukaan Target",
+    overallProcessing: "MEMPROSES",
+    overallCritical: "KRITIS",
+    btnExport: "Ekspor Laporan Doc",
+    btnAR: "Peralihan Heatmap AR",
+    reportTitle: "Laporan Pemantauan Kesehatan Struktur",
+    reportDesc: "Dokumen ini berisi analisis otomatis dari CivilSense AI.",
+    valDepthAnalyzing: "Analisis...",
+    valWidthAnalyzing: "Analisis..."
+  }
+};
+
+function applyLanguage() {
+  const t = translations[currentLang];
+  document.getElementById('txtStatus').textContent = t.status;
+  document.getElementById('txtAcousticTitle').textContent = t.acousticTitle;
+  document.getElementById('txtAcousticSub').textContent = t.acousticSub;
+  document.getElementById('txtFreq').textContent = t.freq;
+  document.getElementById('txtAmp').textContent = t.amp;
+  document.getElementById('txtBtnAudio').textContent = isAudioScanning ? t.btnAudioStop : t.btnAudioStart;
+  document.getElementById('txtVisionTitle').textContent = t.visionTitle;
+  document.getElementById('txtVisionSub').textContent = t.visionSub;
+  document.getElementById('txtDepth').textContent = t.depth;
+  document.getElementById('txtWidth').textContent = t.width;
+  document.getElementById('txtBtnScan').textContent = scanFrame.classList.contains('scanning') ? t.btnScanActive : t.btnScan;
+  document.getElementById('txtTargetStatus').textContent = t.targetStatus;
+  document.getElementById('txtBtnExport').textContent = t.btnExport;
+  document.getElementById('txtBtnAR').textContent = t.btnAR;
+  
+  if (overallStatus.textContent === translations[currentLang === 'en' ? 'id' : 'en'].overallProcessing) overallStatus.textContent = t.overallProcessing;
+  if (overallStatus.textContent === translations[currentLang === 'en' ? 'id' : 'en'].overallCritical) overallStatus.textContent = t.overallCritical;
+}
+
+document.getElementById('btnLangToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'en' ? 'id' : 'en';
+  applyLanguage();
+});
 
 // Canvas Audio Visualizer
 const canvas = document.getElementById('audioVisualizer');
@@ -119,7 +201,7 @@ btnStartAudio.addEventListener('click', async () => {
   }
   
   isAudioScanning = !isAudioScanning;
-  btnStartAudio.textContent = isAudioScanning ? "STOP SCANNING" : "START AUDIO SCAN";
+  document.getElementById('txtBtnAudio').textContent = isAudioScanning ? translations[currentLang].btnAudioStop : translations[currentLang].btnAudioStart;
   
   if (isAudioScanning) {
     btnStartAudio.classList.add('active');
@@ -139,19 +221,19 @@ btnScan.addEventListener('click', () => {
   if (scanFrame.classList.contains('scanning')) return;
   
   scanFrame.classList.add('scanning');
-  valDepth.textContent = "Analisis...";
+  valDepth.textContent = translations[currentLang].valDepthAnalyzing;
   valDepth.className = "value warning";
-  valWidth.textContent = "Analisis...";
+  valWidth.textContent = translations[currentLang].valWidthAnalyzing;
   valWidth.className = "value warning";
-  overallStatus.textContent = "PROCESSING";
+  overallStatus.textContent = translations[currentLang].overallProcessing;
   overallStatus.className = "status-badge warning";
   
-  btnScan.textContent = "ANALYZING 3D MESH...";
+  document.getElementById('txtBtnScan').textContent = translations[currentLang].btnScanActive;
   
   // Simulate AI processing time
   setTimeout(() => {
     scanFrame.classList.remove('scanning');
-    btnScan.textContent = "ANALYZE CURRENT FRAME";
+    document.getElementById('txtBtnScan').textContent = translations[currentLang].btnScan;
     
     // Simulate finding a crack
     valDepth.textContent = "12.4 mm";
@@ -160,10 +242,51 @@ btnScan.addEventListener('click', () => {
     valWidth.textContent = "4.2 mm";
     valWidth.className = "value warning";
     
-    overallStatus.textContent = "CRITICAL";
+    overallStatus.textContent = translations[currentLang].overallCritical;
     overallStatus.className = "status-badge critical";
   }, 3000);
 });
+
+// Export Doc Handler
+document.getElementById('btnExport').addEventListener('click', async () => {
+  const t = translations[currentLang];
+  const depthVal = document.getElementById('valDepth').textContent;
+  const widthVal = document.getElementById('valWidth').textContent;
+  const freqVal = document.getElementById('valFreq').textContent;
+  const statusStr = overallStatus.textContent;
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {},
+        children: [
+          new Paragraph({
+            text: "CivilSense AI",
+            heading: HeadingLevel.TITLE,
+          }),
+          new Paragraph({
+            text: t.reportTitle,
+            heading: HeadingLevel.HEADING_1,
+          }),
+          new Paragraph({ text: t.reportDesc }),
+          new Paragraph({ text: "" }),
+          new Paragraph({ text: t.acousticTitle, heading: HeadingLevel.HEADING_2 }),
+          new Paragraph({ text: `${t.freq} ${freqVal}`, bullet: { level: 0 } }),
+          new Paragraph({ text: "" }),
+          new Paragraph({ text: t.visionTitle, heading: HeadingLevel.HEADING_2 }),
+          new Paragraph({ text: `${t.depth} ${depthVal}`, bullet: { level: 0 } }),
+          new Paragraph({ text: `${t.width} ${widthVal}`, bullet: { level: 0 } }),
+          new Paragraph({ text: "" }),
+          new Paragraph({ text: `${t.targetStatus}: ${statusStr}`, heading: HeadingLevel.HEADING_3 })
+        ],
+      },
+    ],
+  });
+
+  const blob = await Packer.toBlob(doc);
+  saveAs(blob, `CivilSense_Report_${new Date().getTime()}.docx`);
+});
+
 
 // AR Toggle
 btnToggleAR.addEventListener('click', () => {

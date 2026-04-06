@@ -8,13 +8,8 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <!-- Background Camera Simulation -->
-    <div class="camera-container">
-      <video id="cameraFeed" autoplay playsinline muted></video>
-      <div id="ar-overlay" class="ar-overlay hidden">
-        <div class="heatmap-scan"></div>
-      </div>
-    </div>
+    <!-- Background Animated Glow -->
+    <div class="bg-glow"></div>
 
     <!-- UI Overlay (Glassmorphism) -->
     <main class="ui-layer">
@@ -26,7 +21,8 @@
           <h1>CIVILSENSE <span>AI</span></h1>
         </div>
         <div class="status-indicator">
-          <span class="status-text">INITIALIZING...</span>
+          <button id="btnLangToggle" class="btn-small">EN / ID</button>
+          <span class="status-text" id="txtStatus">INITIALIZING...</span>
           <span class="battery">100%</span>
         </div>
       </header>
@@ -36,30 +32,34 @@
         
         <!-- Left Panel: Acoustic Emission (Audio) -->
         <div class="panel glass left-panel">
-          <h2><i class="icon-audio"></i> Acoustic Emission Analysis</h2>
-          <p class="subtitle">Microscopic Void Detection via Sound Resonance</p>
+          <h2><i class="icon-audio"></i> <span id="txtAcousticTitle">Acoustic Emission Analysis</span></h2>
+          <p class="subtitle" id="txtAcousticSub">Microscopic Void Detection via Sound Resonance</p>
           
           <div class="audio-visualizer-container">
             <canvas id="audioVisualizer"></canvas>
             <div class="frequency-stats">
-              <div class="stat"><span class="label">Freq:</span> <span id="valFreq">0 Hz</span></div>
-              <div class="stat"><span class="label">Amp:</span> <span id="valAmp">0 dB</span></div>
+              <div class="stat"><span class="label" id="txtFreq">Freq:</span> <span id="valFreq">0 Hz</span></div>
+              <div class="stat"><span class="label" id="txtAmp">Amp:</span> <span id="valAmp">0 dB</span></div>
             </div>
           </div>
           
           <button id="btnStartAudio" class="btn primary-btn">
             <span class="btn-glow"></span>
-            Start Audio Scan
+            <span id="txtBtnAudio">Start Audio Scan</span>
           </button>
         </div>
 
         <!-- Right Panel: Computer Vision (Crack Depth) -->
         <div class="panel glass right-panel">
-          <h2><i class="icon-camera"></i> Vision Crack Estimator</h2>
-          <p class="subtitle">3D Texture Depth Mapping</p>
+          <h2><i class="icon-camera"></i> <span id="txtVisionTitle">Vision Crack Estimator</span></h2>
+          <p class="subtitle" id="txtVisionSub">3D Texture Depth Mapping</p>
           
           <div class="vision-preview">
-            <div class="scan-frame">
+            <div class="scan-frame" id="cameraScanFrame">
+              <video id="cameraFeed" autoplay playsinline muted></video>
+              <div id="ar-overlay" class="ar-overlay hidden">
+                <div class="heatmap-scan"></div>
+              </div>
               <div class="scan-line"></div>
               <div class="corner top-left"></div>
               <div class="corner top-right"></div>
@@ -68,18 +68,18 @@
             </div>
             <div class="analysis-results">
               <div class="result-item">
-                <span class="label">Crack Depth:</span>
-                <span class="value critical" id="valDepth">--</span>
+                <span class="label" id="txtDepth">Crack Depth:</span>
+                <span class="value default" id="valDepth">--</span>
               </div>
               <div class="result-item">
-                <span class="label">Width:</span>
-                <span class="value warning" id="valWidth">--</span>
+                <span class="label" id="txtWidth">Width:</span>
+                <span class="value default" id="valWidth">--</span>
               </div>
             </div>
           </div>
 
           <button id="btnScan" class="btn secondary-btn">
-            Analyze Current Frame
+            <span id="txtBtnScan">Analyze Current Frame</span>
           </button>
         </div>
       </div>
@@ -87,10 +87,13 @@
       <!-- Bottom Panel: AR Stress Map -->
       <footer class="bottom-panel glass">
         <div class="ar-control">
-          <h3>Target Surface Condition</h3>
-          <div class="status-badge safe" id="overallStatus">STANDBY</div>
+          <h3 id="txtTargetStatus">Target Surface Condition</h3>
+          <div class="status-badge standby" id="overallStatus">STANDBY</div>
         </div>
-        <button id="btnToggleAR" class="btn ar-btn">Toggle AR Heatmap</button>
+        <div class="footer-actions">
+          <button id="btnExport" class="btn secondary-btn" style="margin-right: 1rem;"><span id="txtBtnExport">Export Doc Report</span></button>
+          <button id="btnToggleAR" class="btn ar-btn"><span id="txtBtnAR">Toggle AR Heatmap</span></button>
+        </div>
       </footer>
     </main>
 

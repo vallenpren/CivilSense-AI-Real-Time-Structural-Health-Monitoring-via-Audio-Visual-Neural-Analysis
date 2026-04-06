@@ -31,21 +31,26 @@ body {
   align-items: center;
 }
 
-/* Base camera container */
-.camera-container {
+/* Background styling */
+.bg-glow {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background: radial-gradient(circle at center, rgba(0,240,255,0.1) 0%, var(--bg-dark) 70%);
   z-index: 1;
 }
 
 #cameraFeed {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.6) contrast(1.2) grayscale(0.2);
+  z-index: 0;
+  filter: brightness(0.8) contrast(1.1);
 }
 
 .ar-overlay {
@@ -55,10 +60,11 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background: radial-gradient(circle at center, transparent 30%, rgba(255, 0, 85, 0.2) 80%);
+  background: radial-gradient(circle at center, transparent 30%, rgba(255, 0, 85, 0.4) 80%);
   mix-blend-mode: color-dodge;
   opacity: 0;
   transition: opacity 0.5s ease;
+  z-index: 1;
 }
 
 .ar-overlay.active {
@@ -239,12 +245,15 @@ canvas#audioVisualizer {
 
 .scan-frame {
   position: relative;
-  width: 200px;
+  width: 100%;
+  max-width: 300px;
   height: 200px;
   border: 1px dashed rgba(255,255,255,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
 .scan-line {
@@ -358,6 +367,28 @@ canvas#audioVisualizer {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
+}
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+}
+
+.btn-small {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+}
+.btn-small:hover {
+  background: var(--primary);
+  color: #000;
 }
 
 .ar-control h3 {
