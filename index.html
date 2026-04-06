@@ -76,6 +76,10 @@
                 <span class="value default" id="valWidth">--</span>
               </div>
             </div>
+            
+            <button id="btnView3D" class="btn secondary-btn hidden" style="margin-top: 1rem; padding: 0.5rem; font-size: 0.8rem; border-color: var(--warning); color: var(--warning);">
+              <span id="txtBtn3D">View 3D Internal Structure</span>
+            </button>
           </div>
 
           <button id="btnScan" class="btn secondary-btn">
@@ -96,6 +100,22 @@
         </div>
       </footer>
     </main>
+
+    <!-- 3D Visualization Modal -->
+    <div id="modal3D" class="modal-layer hidden">
+      <div class="modal-content glass">
+        <h2 style="color: var(--warning); margin-bottom: 0.5rem;"><span id="txtModalTitle">3D Internal Structure Scan</span></h2>
+        <p class="subtitle" style="margin-bottom: 1rem;" id="txtModalSub">Estimated Depth & Fracture Propagation Path</p>
+        <div id="canvas3DContainer" style="width: 100%; height: 300px; background: rgba(0,0,0,0.5); border-radius: 8px; overflow: hidden; position: relative;">
+          <!-- 3D Canvas injected here -->
+        </div>
+        <div class="recommendation-box" style="margin-top: 1rem; background: rgba(255,170,0,0.1); border-left: 4px solid var(--warning); padding: 1rem;">
+          <h4 id="txtRecTitle" style="color: var(--warning); margin-bottom: 0.5rem;">Recommended Action:</h4>
+          <p id="txtRecText" style="font-size: 0.85rem; color: var(--text-main);">Inject high-strength epoxy resin within 48 hours to prevent structural shear failure. The internal void extends deeper than surface indications.</p>
+        </div>
+        <button id="btnClose3D" class="btn primary-btn" style="margin-top: 1.5rem;"><span id="txtBtnClose3D">Close 3D View</span></button>
+      </div>
+    </div>
 
     <script type="module" src="./main.js"></script>
   </body>
